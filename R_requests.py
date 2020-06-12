@@ -45,6 +45,8 @@ def resilient_requests(func):
                     msg = f'Got status codes: {status_codes}, expected: {expected_status_code}'
                 raise(HTTPStatusCodeError(msg))
                 
+            #TODO: implement backoff strategies
+
         return r
         
     return wrapper_resilient_requests
@@ -55,12 +57,10 @@ def get(url, timeout=15, expected_status_code = [200], max_tries = 3, *args, **k
     r = requests.get(url, timeout = timeout, *args, **kwargs)
     return r
 
-
 @resilient_requests
 def put(url, timeout=15, expected_status_code = [200], max_tries = 3, *args, **kwargs):
     r = requests.put(url, timeout = timeout, *args, **kwargs)
     return r
-
 
 @resilient_requests
 def delete(url, timeout=15, expected_status_code = [200], max_tries = 3, *args, **kwargs):
