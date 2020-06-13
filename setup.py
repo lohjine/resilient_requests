@@ -14,7 +14,7 @@ setuptools.setup(
     description="Wrapper to make requests more resilient to real-world scenarios",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/actushumanus/resilient_requests",
+    url="https://github.com/lohjine/resilient_requests",
     author="Loh Jin-E",
     author_email="mail@lohjine.com",
     license="MIT",
