@@ -1,12 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jun 12 14:56:34 2020
-
-@author: ACTUS
-"""
-
 import requests
 import functools
+import time
 
 
 class HTTPStatusCodeError(Exception):
@@ -21,6 +15,12 @@ def resilient_requests(func):
         
         tries = 0
         status_codes = set()
+        
+        # default arguments are not instantiated until actual function call below
+        # but if user specify, it will appear in kwargs
+        # so we manually fill with default arguments if not present in kwargs
+        expected_status_code = kwargs.get('expected_status_code',[200])
+        max_tries = kwargs.get('max_tries',3)
         
         while True:
             tries += 1
@@ -46,6 +46,7 @@ def resilient_requests(func):
                 raise(HTTPStatusCodeError(msg))
                 
             #TODO: implement backoff strategies
+            # what about logging?
 
         return r
         
@@ -78,3 +79,5 @@ def options(url, timeout=15, expected_status_code = [200], max_tries = 3, *args,
     return r
 
 
+
+url = 'http://www.google.com'
