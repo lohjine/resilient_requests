@@ -17,11 +17,11 @@ pip install resilient_requests
 ```
 import resilient_requests as r_requests
 
-r = r_requests.get(url, timeout=15, expected_status_code = [200], max_tries = 3)
-r = r_requests.put(url, timeout=15, expected_status_code = [200], max_tries = 3)
-r = r_requests.delete(url, timeout=15, expected_status_code = [200], max_tries = 3)
-r = r_requests.head(url, timeout=15, expected_status_code = [200], max_tries = 3)
-r = r_requests.options(url, timeout=15, expected_status_code = [200], max_tries = 3)
+r = r_requests.get(url, timeout=15, expected_status_code = [200], max_tries = 3, exponential_backoff={'min': 0.1, 'max': 5})
+r = r_requests.put(url, timeout=15, expected_status_code = [200], max_tries = 3, exponential_backoff={'min': 0.1, 'max': 5})
+r = r_requests.delete(url, timeout=15, expected_status_code = [200], max_tries = 3, exponential_backoff={'min': 0.1, 'max': 5})
+r = r_requests.head(url, timeout=15, expected_status_code = [200], max_tries = 3, exponential_backoff={'min': 0.1, 'max': 5})
+r = r_requests.options(url, timeout=15, expected_status_code = [200], max_tries = 3, exponential_backoff={'min': 0.1, 'max': 5})
 
 ```
 
