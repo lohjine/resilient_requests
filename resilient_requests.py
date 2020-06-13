@@ -16,6 +16,7 @@ def resilient_requests(func):
         tries = 0
         sleep_time = 0
         status_codes = set()
+        exception = False
 
         # default arguments are not instantiated until actual function call below
         # but if user specify, it will appear in kwargs
@@ -27,30 +28,40 @@ def resilient_requests(func):
 
         assert isinstance(expected_status_code,
                           list), f'expected_status_code was {expected_status_code}, but it must be a list'
-        assert [isinstance(i, int) for i in expected_status_code], f'expected_status_code was {expected_status_code}, but it must contain all integers'
+        assert [
+            isinstance(
+                i, int) for i in expected_status_code], f'expected_status_code was {expected_status_code}, but it must contain all integers'
         assert isinstance(max_tries, int), f'max_tries was {max_tries}, but it must be an integer'
-        assert isinstance(exponential_backoff, dict) or not exponential_backoff, f'exponential_backoff was {exponential_backoff}, but it must be a dict or falsy'
+        assert isinstance(
+            exponential_backoff, dict) or not exponential_backoff, f'exponential_backoff was {exponential_backoff}, but it must be a dict or falsy'
         if isinstance(exponential_backoff, dict):
             assert isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int)), \
-            f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values"
+                f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values"
 
         while True:
             tries += 1
-            r = func(*args, **kwargs)
 
-            if r.status_code in expected_status_code:
-                break
+            try:
+                r = func(*args, **kwargs)
 
-            if r.status_code == 429:  # do not retry if 429 Too Many Requests
-                if status_codes:
-                    msg = f'Got status codes: {status_codes}, and 429 Too Many Requests'
-                else:
-                    msg = f'Got status code: 429 Too Many Requests'
-                raise(HTTPStatusCodeError(msg))
+                if r.status_code in expected_status_code:
+                    break
 
-            status_codes.add(r.status_code)
+                if r.status_code == 429:  # do not retry if 429 Too Many Requests
+                    if status_codes:
+                        msg = f'Got status codes: {status_codes}, and 429 Too Many Requests'
+                    else:
+                        msg = f'Got status code: 429 Too Many Requests'
+                    raise(HTTPStatusCodeError(msg))
+
+                status_codes.add(r.status_code)
+
+            except Exception as e:
+                exception = e
 
             if tries >= max_tries:
+                if exception:
+                    raise exception
                 if len(status_codes) == 1:
                     msg = f'Got status code: {r.status_code}, expected: {expected_status_code}'
                 else:
