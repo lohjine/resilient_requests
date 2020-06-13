@@ -32,7 +32,7 @@ def resilient_requests(func):
         assert isinstance(exponential_backoff, dict) or not exponential_backoff, f'exponential_backoff was {exponential_backoff}, but it must be a dict or falsy'
         if isinstance(exponential_backoff, dict):
             assert isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int)), \
-            f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float values"
+            f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values"
 
         while True:
             tries += 1
@@ -101,7 +101,7 @@ def get(url, timeout=15, expected_status_code=[200], max_tries=3,
 def put(url, timeout=15, expected_status_code=[200], max_tries=3,
         exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
     """
-    Sends a resilient GET request.
+    Sends a resilient PUT request.
 
     Args:
         url (str): URL for the new :class:`Request` object.
@@ -123,7 +123,7 @@ def put(url, timeout=15, expected_status_code=[200], max_tries=3,
 def delete(url, timeout=15, expected_status_code=[200], max_tries=3,
            exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
     """
-    Sends a resilient GET request.
+    Sends a resilient DELETE request.
 
     Args:
         url (str): URL for the new :class:`Request` object.
@@ -145,7 +145,7 @@ def delete(url, timeout=15, expected_status_code=[200], max_tries=3,
 def head(url, timeout=15, expected_status_code=[200], max_tries=3,
          exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
     """
-    Sends a resilient GET request.
+    Sends a resilient HEAD request.
 
     Args:
         url (str): URL for the new :class:`Request` object.
@@ -167,7 +167,7 @@ def head(url, timeout=15, expected_status_code=[200], max_tries=3,
 def options(url, timeout=15, expected_status_code=[200], max_tries=3,
             exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
     """
-    Sends a resilient GET request.
+    Sends a resilient OPTIONS request.
 
     Args:
         url (str): URL for the new :class:`Request` object.
