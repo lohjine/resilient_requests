@@ -1,1 +1,1 @@
-from resilient_requests import *
+from .resilient_requests import *
