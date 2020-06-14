@@ -28,12 +28,13 @@ def resilient_requests(func):
 
         assert isinstance(expected_status_code,
                           list), f'expected_status_code was {expected_status_code}, but it must be a list'
-        assert [
-            isinstance(
-                i, int) for i in expected_status_code], f'expected_status_code was {expected_status_code}, but it must contain all integers'
-        assert isinstance(max_tries, int), f'max_tries was {max_tries}, but it must be an integer'
+        assert [isinstance(i, int) for i in expected_status_code], \
+            f'expected_status_code was {expected_status_code}, but it must contain all integers'
         assert isinstance(
-            exponential_backoff, dict) or not exponential_backoff, f'exponential_backoff was {exponential_backoff}, but it must be a dict or falsy'
+            max_tries, int), f'max_tries was {max_tries}, but it must be an integer'
+        assert max_tries > 0, 'max_tries must be more than 0'
+        assert isinstance(exponential_backoff, dict) or not exponential_backoff, \
+            f'exponential_backoff was {exponential_backoff}, but it must be a dict or falsy'
         if isinstance(exponential_backoff, dict):
             assert isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int)), \
                 f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values"
