@@ -14,7 +14,7 @@ pip install git+https://github.com/lohjine/resilient_requests
 
 ## Usage
 
-```
+```python
 import resilient_requests as r_requests
 
 r = r_requests.get(url, timeout=15, expected_status_code = [200], max_tries = 3, exponential_backoff={'min': 0.1, 'max': 5})
