@@ -9,7 +9,7 @@ Hence the next step is to make your call resilient by adding retry code, checkin
 ## Installation
 
 ```
-pip install resilient_requests
+pip install git+https://github.com/lohjine/resilient_requests
 ```
 
 ## Usage
