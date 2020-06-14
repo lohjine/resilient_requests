@@ -1,4 +1,4 @@
-# resilient_requests
+# Resilient Requests
  
 Python requests library is awesome, and makes it really quick to just requests.get(url) for something. But oftentimes when this gets used in long-running processes, it will eventually run into errors of some sort, or retrieving unexpected results.
 
