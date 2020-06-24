@@ -28,19 +28,23 @@ def resilient_requests(func):
             'exponential_backoff', {'min': 0.1, 'max': 5})
         jitter = kwargs.get('jitter', 0.05)
 
-        assert isinstance(expected_status_code, (list,tuple)), f'expected_status_code was {expected_status_code}, but it must be a list or tuple'
-        assert [isinstance(i, int) for i in expected_status_code], \
-            f'expected_status_code was {expected_status_code}, but it must contain all integers'
-        assert isinstance(max_tries, int), f'max_tries was {max_tries}, but it must be an integer'
-        assert max_tries > 0, 'max_tries must be more than 0'
-        assert isinstance(exponential_backoff, dict) or not exponential_backoff, \
-            f'exponential_backoff was {exponential_backoff}, but it must be a dict or falsy'
+        if not isinstance(expected_status_code, (list,tuple)):
+            raise TypeError(f'expected_status_code was {expected_status_code}, but it must be a list or tuple')
+        if not all([isinstance(i, int) for i in expected_status_code]):
+            raise ValueError(f'expected_status_code was {expected_status_code}, but it must contain all integers')
+        if not isinstance(max_tries, int):
+            raise TypeError(f'max_tries was {max_tries}, but it must be an integer')
+        if not max_tries > 0:
+            raise ValueError('max_tries must be more than 0')
+        if not (isinstance(exponential_backoff, dict) or not exponential_backoff):
+            raise TypeError(f'exponential_backoff was {exponential_backoff}, but it must be a dict or falsy')
         if isinstance(exponential_backoff, dict):
-            assert isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int)), \
-                f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values"
-        assert isinstance(
-            jitter, float), f'jitter was {jitter}, but it must be a float'
-        assert jitter >= 0, 'jitter must be more than or equal to 0'
+            if not (isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int))):
+                raise ValueError(f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values")
+        if not isinstance(jitter, float):
+            raise TypeError(f'jitter was {jitter}, but it must be a float')
+        if not jitter >= 0:
+            raise ValueError('jitter must be more than or equal to 0')
 
         while True:
             tries += 1
