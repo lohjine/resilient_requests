@@ -25,6 +25,7 @@ def resilient_requests(func):
         max_tries = kwargs.get('max_tries', 3)
         exponential_backoff = kwargs.get(
             'exponential_backoff', {'min': 0.1, 'max': 5})
+        jitter = kwargs.get('jitter', 0.05)
 
         assert isinstance(expected_status_code,
                           list), f'expected_status_code was {expected_status_code}, but it must be a list'
@@ -38,6 +39,9 @@ def resilient_requests(func):
         if isinstance(exponential_backoff, dict):
             assert isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int)), \
                 f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values"
+        assert isinstance(
+            jitter, float), f'jitter was {jitter}, but it was a float'
+        assert jitter >= 0, 'jitter must be more than or equal to 0'
 
         while True:
             tries += 1
@@ -78,7 +82,7 @@ def resilient_requests(func):
                         sleep_time = exponential_backoff['max']
 
                 # add jitter
-                sleep_time += random.randint(-50, 50) / 1000
+                sleep_time += random.random() * jitter
 
             time.sleep(sleep_time)
 
@@ -89,7 +93,7 @@ def resilient_requests(func):
 
 @resilient_requests
 def get(url, timeout=15, expected_status_code=[200], max_tries=3,
-        exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
+        exponential_backoff={'min': 0.1, 'max': 5}, jitter=0.05, *args, **kwargs):
     """
     Sends a resilient GET request.
 
@@ -99,6 +103,7 @@ def get(url, timeout=15, expected_status_code=[200], max_tries=3,
         expected_status_code (list of int): Expected status code for your request, request will be retried/raise error if other status codes are received.
         max_tries (int): Number of retries for request
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
+        jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
         *args: Additional named arguments will be passed into the `Request` object.
 
@@ -111,7 +116,7 @@ def get(url, timeout=15, expected_status_code=[200], max_tries=3,
 
 @resilient_requests
 def put(url, timeout=15, expected_status_code=[200], max_tries=3,
-        exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
+        exponential_backoff={'min': 0.1, 'max': 5}, jitter=0.05, *args, **kwargs):
     """
     Sends a resilient PUT request.
 
@@ -121,6 +126,7 @@ def put(url, timeout=15, expected_status_code=[200], max_tries=3,
         expected_status_code (list of int): Expected status code for your request, request will be retried/raise error if other status codes are received.
         max_tries (int): Number of retries for request
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
+        jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
         *args: Additional named arguments will be passed into the `Request` object.
 
@@ -133,7 +139,7 @@ def put(url, timeout=15, expected_status_code=[200], max_tries=3,
 
 @resilient_requests
 def delete(url, timeout=15, expected_status_code=[200], max_tries=3,
-           exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
+           exponential_backoff={'min': 0.1, 'max': 5}, jitter=0.05, *args, **kwargs):
     """
     Sends a resilient DELETE request.
 
@@ -143,6 +149,7 @@ def delete(url, timeout=15, expected_status_code=[200], max_tries=3,
         expected_status_code (list of int): Expected status code for your request, request will be retried/raise error if other status codes are received.
         max_tries (int): Number of retries for request
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
+        jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
         *args: Additional named arguments will be passed into the `Request` object.
 
@@ -155,7 +162,7 @@ def delete(url, timeout=15, expected_status_code=[200], max_tries=3,
 
 @resilient_requests
 def head(url, timeout=15, expected_status_code=[200], max_tries=3,
-         exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
+         exponential_backoff={'min': 0.1, 'max': 5}, jitter=0.05, *args, **kwargs):
     """
     Sends a resilient HEAD request.
 
@@ -165,6 +172,7 @@ def head(url, timeout=15, expected_status_code=[200], max_tries=3,
         expected_status_code (list of int): Expected status code for your request, request will be retried/raise error if other status codes are received.
         max_tries (int): Number of retries for request
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
+        jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
         *args: Additional named arguments will be passed into the `Request` object.
 
@@ -177,7 +185,7 @@ def head(url, timeout=15, expected_status_code=[200], max_tries=3,
 
 @resilient_requests
 def options(url, timeout=15, expected_status_code=[200], max_tries=3,
-            exponential_backoff={'min': 0.1, 'max': 5}, *args, **kwargs):
+            exponential_backoff={'min': 0.1, 'max': 5}, jitter=0.05, *args, **kwargs):
     """
     Sends a resilient OPTIONS request.
 
@@ -187,6 +195,7 @@ def options(url, timeout=15, expected_status_code=[200], max_tries=3,
         expected_status_code (list of int): Expected status code for your request, request will be retried/raise error if other status codes are received.
         max_tries (int): Number of retries for request
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
+        jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
         *args: Additional named arguments will be passed into the `Request` object.
 
