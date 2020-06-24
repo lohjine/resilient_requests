@@ -52,17 +52,19 @@ def resilient_requests(func):
                 if r.status_code in expected_status_code:
                     break
 
-                if r.status_code == 429:  # do not retry if 429 Too Many Requests
+                if r.status_code == 429:
                     if status_codes:
                         msg = f'Got status codes: {status_codes}, and 429 Too Many Requests'
                     else:
                         msg = f'Got status code: 429 Too Many Requests'
-                    raise(HTTPStatusCodeError(msg))
 
                 status_codes.add(r.status_code)
 
             except Exception as e:
                 exception = e
+
+            if 429 in status_codes: # do not retry if 429 Too Many Requests
+                 raise(HTTPStatusCodeError(msg))
 
             if tries >= max_tries:
                 if exception:
