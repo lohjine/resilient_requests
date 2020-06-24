@@ -17,6 +17,7 @@ def resilient_requests(func):
         sleep_time = 0
         status_codes = set()
         exception = False
+        msg = 'Unknown Error, error message not filled out'
 
         # default arguments are not instantiated until actual function call below
         # but if user specify, it will appear in kwargs
@@ -40,7 +41,7 @@ def resilient_requests(func):
             assert isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int)), \
                 f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values"
         assert isinstance(
-            jitter, float), f'jitter was {jitter}, but it was a float'
+            jitter, float), f'jitter was {jitter}, but it must be a float'
         assert jitter >= 0, 'jitter must be more than or equal to 0'
 
         while True:
