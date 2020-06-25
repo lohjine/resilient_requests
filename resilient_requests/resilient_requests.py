@@ -33,7 +33,7 @@ def resilient_requests(func):
         if not all([isinstance(i, int) for i in expected_status_code]):
             raise ValueError(f'expected_status_code was {expected_status_code}, but it must contain all integers')
         if not isinstance(max_tries, int):
-            raise TypeError(f'max_tries was {max_tries}, but it must be an integer')
+            raise TypeError(f'max_tries was {type(max_tries)}, but it must be an integer')
         if not max_tries > 0:
             raise ValueError('max_tries must be more than 0')
         if not (isinstance(exponential_backoff, dict) or not exponential_backoff):
@@ -42,7 +42,7 @@ def resilient_requests(func):
             if not (isinstance(exponential_backoff.get('min', False), (float, int)) and isinstance(exponential_backoff.get('max', False), (float, int))):
                 raise ValueError(f"exponential_backoff was {exponential_backoff}, but it must contain keys 'min' and 'max' with float/int values")
         if not isinstance(jitter, float):
-            raise TypeError(f'jitter was {jitter}, but it must be a float')
+            raise TypeError(f'jitter was {type(jitter)}, but it must be a float')
         if not jitter >= 0:
             raise ValueError('jitter must be more than or equal to 0')
 
