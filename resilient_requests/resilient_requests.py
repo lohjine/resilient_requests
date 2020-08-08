@@ -110,7 +110,7 @@ def get(url, timeout=15, expected_status_code=[200], max_tries=3,
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
         jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
-        *args: Additional named arguments will be passed into the `Request` object.
+        **kwargs: Additional named arguments will be passed into the `Request` object.
 
     Returns:
         :class:`Request` object
@@ -133,7 +133,7 @@ def put(url, timeout=15, expected_status_code=[200], max_tries=3,
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
         jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
-        *args: Additional named arguments will be passed into the `Request` object.
+        **kwargs: Additional named arguments will be passed into the `Request` object.
 
     Returns:
         :class:`Request` object
@@ -156,7 +156,7 @@ def delete(url, timeout=15, expected_status_code=[200], max_tries=3,
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
         jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
-        *args: Additional named arguments will be passed into the `Request` object.
+        **kwargs: Additional named arguments will be passed into the `Request` object.
 
     Returns:
         :class:`Request` object
@@ -179,7 +179,7 @@ def head(url, timeout=15, expected_status_code=[200], max_tries=3,
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
         jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
-        *args: Additional named arguments will be passed into the `Request` object.
+        **kwargs: Additional named arguments will be passed into the `Request` object.
 
     Returns:
         :class:`Request` object
@@ -202,7 +202,7 @@ def options(url, timeout=15, expected_status_code=[200], max_tries=3,
         exponential_backoff (dict or falsy): Backoff parameters for retries. 'min' is number of seconds for the first retry. 'max' is the maximum number of seconds for each retry. Set equal values for both to have a constant retry interval. Note that jitter of +-50ms is automatically added.
         jitter (float): Amount of jitter in seconds for retries
         *args: Additional arguments will be passed into the `Request` object.
-        *args: Additional named arguments will be passed into the `Request` object.
+        **kwargs: Additional named arguments will be passed into the `Request` object.
 
     Returns:
         :class:`Request` object
